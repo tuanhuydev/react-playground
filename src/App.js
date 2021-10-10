@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Expenses from "./components/Expenses";
 
-const expenses = [
+const DEFAULT_EXPENSES = [
   {
     id: 'e1',
     title: 'Toilet Paper',
@@ -24,10 +24,17 @@ const expenses = [
 ];
 
 function App() {
+  const [expenses, setExpenses] = useState(DEFAULT_EXPENSES);
+
+  const handleAddExpense = (expense) => {
+    setExpenses((prevExpense) => {
+      return [{...expense, id: `e${(Math.random()*100).toFixed(2)}`}, ...prevExpense];
+    });
+  }
+
   return (
     <div className="App">
-      <h1>Hello</h1>
-      <Expenses expenses={expenses} />
+      <Expenses onAddExpense={handleAddExpense} expenses={expenses} />
     </div>
   );
 }

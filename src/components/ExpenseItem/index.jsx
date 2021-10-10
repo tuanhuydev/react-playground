@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './styles.css';
 import ExpenseDate from '../ExpenseDate';
 import PropTypes from 'prop-types';
@@ -6,14 +6,8 @@ import Card from '../Card';
 
 const ExpenseItem = (props) => {
     const { date = new Date(), title = '', amount = 0 } = props;
-
-    useEffect(() => {
-        console.log('hello')
-    });
-
     const handleTitle = () => {
         console.log('Change title')
-        
     }
 
     return (
