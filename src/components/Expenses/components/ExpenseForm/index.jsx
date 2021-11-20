@@ -10,6 +10,7 @@ const DEFAULT_FORM_DATA = {
 const ExpenseForm = (props) => {
     const { onChange } = props;
     const [formData, setFormData] = useState(DEFAULT_FORM_DATA);
+    const [openForm, setOpenForm] = useState(false);
 
     const handleChange = (key) => (e) => {
         if (Object.keys(DEFAULT_FORM_DATA).includes(key)) {
@@ -29,26 +30,36 @@ const ExpenseForm = (props) => {
 
     const handleSubmitForm = (e) => {
         e.preventDefault();
-        onChange(formData);
-        setFormData(DEFAULT_FORM_DATA);
+        if (openForm) {    
+            onChange(formData);
+            setFormData(DEFAULT_FORM_DATA);
+        }
+        setOpenForm(!openForm);
+    }
+
+    const handeCancelForm = () => {
+        setOpenForm(false);
     }
     
     return <form onSubmit={handleSubmitForm}>
-        <div className="new-expense__controls">
-            <div className="new-expense__control">
-                <label>Title</label>
-                <input type="text" name="title" onChange={handleChange('title')} defaultValue={formData.title} />
-            </div>
-            <div className="new-expense__control">
-                <label>Amount</label>
-                <input type="number" name="amount" min="0.01" step="0.01" defaultValue={formData.amount} onChange={handleChange('amount')} />
-            </div>
-            <div className="new-expense__control">
-                <label>Date</label>
-                <input type="date" name="date" min="2020/01/31" max="2025/12/31" onChange={handleChange('date')} value={formatDate(formData.date)} />
-            </div>
-        </div>
+        {
+            openForm && (<div className="new-expense__controls">
+                <div className="new-expense__control">
+                    <label>Title</label>
+                    <input type="text" name="title" onChange={handleChange('title')} defaultValue={formData.title} />
+                </div>
+                <div className="new-expense__control">
+                    <label>Amount</label>
+                    <input type="number" name="amount" min="0.01" step="0.01" defaultValue={formData.amount.toString()} onChange={handleChange('amount')} />
+                </div>
+                <div className="new-expense__control">
+                    <label>Date</label>
+                    <input type="date" name="date" min="2020/01/31" max="2025/12/31" onChange={handleChange('date')} value={formatDate(formData.date)} />
+                </div>
+            </div>)
+        }
         <div className="new-expense__actions">
+            {openForm && (<button onClick={handeCancelForm}>Cancel</button>)}
             <button>Submit</button>
         </div>
     </form>;

@@ -1,28 +1,30 @@
 import React, { useState } from 'react';
-import './styles.css';
-import ExpenseItem from "../ExpenseItem";
 import NewExpense from "./components/NewExpense";
+import ExpenseList from "./components/ExpenseList";
 import ExpenseFilter from './components/ExpenseFilter';
+import ExpensesChart from './components/ExpensesChart';
 import PropTypes from 'prop-types';
+import './styles.css';
 
 const Expenses = (props) => {
     const { expenses = [], onAddExpense } = props;
-    const [filter, setFilter] = useState('2020');
-    
-    const expenseItems = expenses.map((expense) => {
-        const {id, ...restExpense} = expense;
-        return (<ExpenseItem {...restExpense} key={id} />)
-    });
+    const [filter, setFilter] = useState({ year: '2020' });
 
-    const handleFilterChange = (filter) => {
-        setFilter(filter);
+    const handleChangeFilter = (newFilter) => {
+        setFilter(newFilter);
     }
+
+    const filteredExpenses = expenses.filter((expense) => {
+        const expenseYear = expense.date.getFullYear().toString();
+        return expenseYear === filter.year
+    });
 
     return (
         <div className="expenses">
             <NewExpense onAddExpense={onAddExpense} />
-            <ExpenseFilter selectedFilter={filter} onChange={handleFilterChange} />
-           {expenseItems}
+            <ExpenseFilter selectedFilter={filter} onChange={handleChangeFilter} />
+            <ExpensesChart expenses={filteredExpenses} />
+           <ExpenseList expenses={filteredExpenses} />
         </div>
     );
 }
